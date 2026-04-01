@@ -1,158 +1,143 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <title>Magic Lamp</title>
+<meta charset="UTF-8">
+<title>Magic Lamp</title>
 
-    <style>
-        body {
-            margin: 0;
-            background: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            color: gold;
-            font-family: Arial;
-            overflow: hidden;
-        }
+<style>
+body {
+  margin: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  color: gold;
+  font-family: Arial;
+  overflow: hidden;
+}
 
-        #lamp {
-            width: 250px;
-            cursor: pointer;
-        }
+#lamp {
+  width: 250px;
+  cursor: pointer;
+}
 
-        #text {
-            margin-top: 20px;
-            font-size: 24px;
-        }
+#text {
+  margin-top: 20px;
+  font-size: 24px;
+}
 
-        /* IMAGE */
-        #prankImage {
-            display: none;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            top: 0;
-            left: 0;
+/* IMAGE */
+#prankImage {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
 
-            opacity: 0;
-            transition: opacity 1s ease-in;
-        }
+  opacity: 0;
+  transition: opacity 2s ease-in;
+}
 
-        /* SUBTLE SHAKE */
-        @keyframes shake {
-            0% {
-                transform: translate(0, 0);
-            }
+/* UPDATED SHAKE */
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 4px); }
+  40% { transform: translate(4px, -4px); }
+  60% { transform: translate(-4px, -4px); }
+  80% { transform: translate(4px, 4px); }
+  100% { transform: translate(0, 0); }
+}
 
-            25% {
-                transform: translate(-2px, 2px);
-            }
-
-            50% {
-                transform: translate(2px, -2px);
-            }
-
-            75% {
-                transform: translate(-2px, -2px);
-            }
-
-            100% {
-                transform: translate(0, 0);
-            }
-        }
-
-        .shake {
-            animation: shake 0.35s infinite;
-        }
-    </style>
+.shake {
+  animation: shake 0.25s infinite;
+}
+</style>
 </head>
 
 <body>
 
-    <div id="startScreen" onclick="startPrank()">
-        <img id="lamp" src="lamp.png">
-        <div id="text">✨ Tap The Lamp ✨</div>
-    </div>
+<div id="startScreen" onclick="startPrank()">
+  <img id="lamp" src="lamp.png">
+  <div id="text">✨ Tap The Lamp ✨</div>
+</div>
 
-    <img id="prankImage" src="prank.jpg">
+<img id="prankImage" src="prank.jpg">
 
-    <audio id="sound" src="audio.mp3" loop playsinline></audio>
+<audio id="sound" src="audio.mp3" loop playsinline></audio>
 
-    <script>
-        function startPrank() {
-            const audio = document.getElementById("sound");
-            const img = document.getElementById("prankImage");
+<script>
+function startPrank() {
+  const audio = document.getElementById("sound");
+  const img = document.getElementById("prankImage");
 
-            // hide start screen
-            document.getElementById("startScreen").style.display = "none";
+  // hide start
+  document.getElementById("startScreen").style.display = "none";
 
-            // show image
-            img.style.display = "block";
+  // show image
+  img.style.display = "block";
 
-            // AUDIO START IMMEDIATELY
-            audio.currentTime = 0;
-            audio.volume = 1;
-            audio.play().catch(() => { });
+  // AUDIO
+  audio.currentTime = 0;
+  audio.volume = 1;
+  audio.play().catch(()=>{});
 
-            // fade-in (image only)
-            setTimeout(() => {
-                img.style.opacity = 1;
-            }, 10);
+  // fade-in (image only)
+  setTimeout(() => {
+    img.style.opacity = 1;
+  }, 10);
 
-            // keep audio alive in background
-            document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    audio.play().catch(() => { });
-                }
-            });
+  // background playback
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      audio.play().catch(()=>{});
+    }
+  });
 
-            // prevent pause 😈
-            setInterval(() => {
-                if (audio.paused) {
-                    audio.play().catch(() => { });
-                }
-            }, 1000);
+  // prevent pause
+  setInterval(() => {
+    if (audio.paused) {
+      audio.play().catch(()=>{});
+    }
+  }, 1000);
 
-            // lock screen media display
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: "Magic Lamp",
-                    artist: "Genie 😈"
-                });
+  // lock screen media
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: "Magic Lamp",
+      artist: "Genie 😈"
+    });
 
-                navigator.mediaSession.setActionHandler('pause', () => {
-                    audio.play();
-                });
-            }
+    navigator.mediaSession.setActionHandler('pause', () => {
+      audio.play();
+    });
+  }
 
-            // subtle shake
-            document.body.classList.add("shake");
+  // SHAKE
+  document.body.classList.add("shake");
 
-            // vibration (mobile)
-            if (navigator.vibrate) {
-                navigator.vibrate([300, 100, 300, 100, 500]);
-            }
+  // VIBRATION
+  if (navigator.vibrate) {
+    navigator.vibrate([300,100,300,100,500]);
+  }
 
-            // flash effect
-            setInterval(() => {
-                document.body.style.background =
-                    document.body.style.background === "black" ? "white" : "black";
+  // FASTER FLASH ⚡
+  setInterval(() => {
+    document.body.style.background =
+      document.body.style.background === "black" ? "white" : "black";
 
-                img.style.opacity =
-                    img.style.opacity == 1 ? 0.4 : 1;
+    img.style.opacity =
+      img.style.opacity == 1 ? 0.4 : 1;
 
-            }, 120);
+  }, 60);
 
-            // fullscreen
-            document.documentElement.requestFullscreen().catch(() => { });
-        }
-    </script>
+  // FULLSCREEN
+  document.documentElement.requestFullscreen().catch(()=>{});
+}
+</script>
 
 </body>
-
 </html>
