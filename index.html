@@ -1,141 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Magic Lamp</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
 
 <style>
 body {
-  margin: 0;
-  background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  flex-direction: column;
-  color: gold;
-  font-family: Arial;
-  overflow: hidden;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    color: white;
+    text-align: center;
+    overflow: hidden;
 }
 
-#lamp {
-  width: 250px;
-  cursor: pointer;
+/* Center everything */
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-#text {
-  margin-top: 20px;
-  font-size: 24px;
+/* Button */
+button {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    background: white;
+    color: #ff4b7d;
+    cursor: pointer;
 }
 
-/* IMAGE */
-#prankImage {
-  display: none;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  top: 0;
-  left: 0;
-
-  opacity: 0;
-  transition: opacity 1s ease-in;
+/* Hidden sections */
+.page {
+    display: none;
 }
 
-/* UPDATED SHAKE */
-@keyframes shake {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-4px, 4px); }
-  40% { transform: translate(4px, -4px); }
-  60% { transform: translate(-4px, -4px); }
-  80% { transform: translate(4px, 4px); }
-  100% { transform: translate(0, 0); }
+.active {
+    display: flex;
 }
 
-.shake {
-  animation: shake 0.25s infinite;
+/* Heart animation */
+.heart {
+    position: absolute;
+    color: pink;
+    animation: float 5s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div id="startScreen" onclick="startPrank()">
-  <img id="lamp" src="lamp.png">
-  <div id="text">✨ Tap The Lamp ✨</div>
+<!-- PAGE 1 -->
+<div class="container page active" id="page1">
+    <h1>🎁 Tap to Open</h1>
+    <button onclick="nextPage()">Open</button>
 </div>
 
-<img id="prankImage" src="prank.jpg">
+<!-- PAGE 2 -->
+<div class="container page" id="page2">
+    <h2>Hey Beautiful 💖</h2>
+    <p>Someone has a special message for you...</p>
+    <button onclick="nextPage()">Next</button>
+</div>
 
-<audio id="sound" src="audio.mp3" loop playsinline></audio>
+<!-- PAGE 3 -->
+<div class="container page" id="page3">
+    <h1>🎂 Happy Birthday 🎂</h1>
+    <p>You are amazing, special, and loved ❤️</p>
+    <button onclick="playMusic()">Play Surprise 🎶</button>
+</div>
+
+<audio id="music" src="your-music.mp3"></audio>
 
 <script>
-function startPrank() {
-  const audio = document.getElementById("sound");
-  const img = document.getElementById("prankImage");
+let currentPage = 1;
 
-  // hide start
-  document.getElementById("startScreen").style.display = "none";
+function nextPage() {
+    document.getElementById("page" + currentPage).classList.remove("active");
+    currentPage++;
+    document.getElementById("page" + currentPage).classList.add("active");
+}
 
-  // show image
-  img.style.display = "block";
+// Floating hearts
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 20 + "px";
+    document.body.appendChild(heart);
 
-  // AUDIO
-  audio.currentTime = 0;
-  audio.volume = 1;
-  audio.play().catch(()=>{});
+    setTimeout(() => heart.remove(), 5000);
+}, 300);
 
-  // fade-in (image only)
-  setTimeout(() => {
-    img.style.opacity = 1;
-  }, 10);
-
-  // background playback
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      audio.play().catch(()=>{});
-    }
-  });
-
-  // prevent pause
-  setInterval(() => {
-    if (audio.paused) {
-      audio.play().catch(()=>{});
-    }
-  }, 1000);
-
-  // lock screen media
-  if ('mediaSession' in navigator) {
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: "Magic Lamp",
-      artist: "Genie 😈"
-    });
-
-    navigator.mediaSession.setActionHandler('pause', () => {
-      audio.play();
-    });
-  }
-
-  // SHAKE
-  document.body.classList.add("shake");
-
-  // VIBRATION
-  if (navigator.vibrate) {
-    navigator.vibrate([300,100,300,100,500]);
-  }
-
-  // FASTER FLASH ⚡
-  setInterval(() => {
-    document.body.style.background =
-      document.body.style.background === "black" ? "white" : "black";
-
-    img.style.opacity =
-      img.style.opacity == 1 ? 0.8 : 1;
-
-  }, 60);
-
-  // FULLSCREEN
-  document.documentElement.requestFullscreen().catch(()=>{});
+function playMusic() {
+    document.getElementById("music").play();
 }
 </script>
 
