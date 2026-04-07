@@ -57,7 +57,7 @@ button {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* PHOTO PAGE */
+/* PHOTO */
 .photo-container {
     position: relative;
     width: 90%;
@@ -86,14 +86,25 @@ button {
     font-size: 28px;
 }
 
-/* Hearts */
-.heart {
+/* Effects */
+.effect {
     position: absolute;
-    animation: float 5s linear infinite;
+    pointer-events: none;
+    animation: floatUp 6s linear infinite;
 }
-@keyframes float {
-    0% { transform: translateY(100vh); opacity: 1; }
-    100% { transform: translateY(-10vh); opacity: 0; }
+
+@keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0.8); opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+}
+
+.butterfly {
+    animation: flySide 8s linear infinite;
+}
+
+@keyframes flySide {
+    0% { transform: translate(-10vw, 80vh); opacity: 1; }
+    100% { transform: translate(110vw, 10vh); opacity: 0; }
 }
 </style>
 </head>
@@ -106,7 +117,7 @@ button {
     <button onclick="nextPage()">Tap to Open</button>
 </div>
 
-<!-- TEXT FLOW -->
+<!-- STORY -->
 <div class="container page fade" id="page2">
     <div class="handwriting">
         I still remember the first time I saw you at church…
@@ -146,10 +157,9 @@ button {
     <button onclick="nextPage()">Next</button>
 </div>
 
-<!-- FINAL PHOTO PAGE -->
+<!-- FINAL PAGE -->
 <div class="container page fade" id="page7">
     <div class="photo-container">
-        <!-- PUT HER IMAGE HERE -->
         <img src="her.jpg" alt="Aleena">
 
         <div class="overlay">
@@ -159,6 +169,8 @@ button {
             Happy 21st Birthday ❤️
         </div>
     </div>
+
+    <div id="effects"></div>
 </div>
 
 <script>
@@ -170,17 +182,34 @@ function nextPage() {
     document.getElementById("page" + currentPage).classList.add("active");
 }
 
-/* Hearts */
-setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = Math.random() * 15 + 15 + "px";
-    document.body.appendChild(heart);
+/* Effects only on final page */
+function startEffects() {
+    const effects = document.getElementById("effects");
 
-    setTimeout(() => heart.remove(), 5000);
-}, 300);
+    setInterval(() => {
+        if (currentPage !== 7) return;
+
+        const el = document.createElement("div");
+        const types = ["❤️", "🌸", "🦋"];
+        const random = types[Math.floor(Math.random() * types.length)];
+
+        el.innerHTML = random;
+        el.className = "effect";
+
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.fontSize = (Math.random() * 15 + 20) + "px";
+
+        if (random === "🦋") {
+            el.classList.add("butterfly");
+        }
+
+        effects.appendChild(el);
+
+        setTimeout(() => el.remove(), 8000);
+    }, 400);
+}
+
+startEffects();
 </script>
 
 </body>
