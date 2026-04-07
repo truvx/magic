@@ -3,54 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday ❤️</title>
+
+<title>For Aleena ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
     color: white;
-    text-align: center;
     overflow: hidden;
 }
 
-/* Center everything */
+/* Layout */
 .container {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     flex-direction: column;
+    padding: 20px;
 }
 
-/* Button */
+.page { display: none; }
+.active { display: flex; }
+
 button {
-    padding: 15px 25px;
-    border: none;
+    padding: 14px 28px;
     border-radius: 30px;
-    font-size: 18px;
+    border: none;
     background: white;
     color: #ff4b7d;
+    font-size: 16px;
     cursor: pointer;
 }
 
-/* Hidden sections */
-.page {
-    display: none;
+/* Handwriting */
+.handwriting {
+    font-family: 'Great Vibes', cursive;
+    font-size: 32px;
+    line-height: 1.5;
 }
 
-.active {
-    display: flex;
+/* Fade */
+.fade {
+    animation: fadeIn 1.5s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Heart animation */
+/* PHOTO PAGE */
+.photo-container {
+    position: relative;
+    width: 90%;
+    max-width: 350px;
+}
+
+.photo-container img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.6);
+    animation: zoomIn 6s ease forwards;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+}
+
+/* Overlay text */
+.overlay {
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 28px;
+}
+
+/* Hearts */
 .heart {
     position: absolute;
-    color: pink;
     animation: float 5s linear infinite;
 }
-
 @keyframes float {
     0% { transform: translateY(100vh); opacity: 1; }
     100% { transform: translateY(-10vh); opacity: 0; }
@@ -61,26 +101,65 @@ button {
 <body>
 
 <!-- PAGE 1 -->
-<div class="container page active" id="page1">
-    <h1>🎁 Tap to Open</h1>
-    <button onclick="nextPage()">Open</button>
+<div class="container page active fade" id="page1">
+    <h2>For Aleena 💖</h2>
+    <button onclick="nextPage()">Tap to Open</button>
 </div>
 
-<!-- PAGE 2 -->
-<div class="container page" id="page2">
-    <h2>Hey Beautiful 💖</h2>
-    <p>Someone has a special message for you...</p>
+<!-- TEXT FLOW -->
+<div class="container page fade" id="page2">
+    <div class="handwriting">
+        I still remember the first time I saw you at church…
+    </div>
     <button onclick="nextPage()">Next</button>
 </div>
 
-<!-- PAGE 3 -->
-<div class="container page" id="page3">
-    <h1>🎂 Happy Birthday 🎂</h1>
-    <p>You are amazing, special, and loved ❤️</p>
-    <button onclick="playMusic()">Play Surprise 🎶</button>
+<div class="container page fade" id="page3">
+    <div class="handwriting">
+        It wasn’t loud or dramatic,  
+        but something about you stayed with me.
+    </div>
+    <button onclick="nextPage()">Next</button>
 </div>
 
-<audio id="music" src="your-music.mp3"></audio>
+<div class="container page fade" id="page4">
+    <div class="handwriting">
+        I chose you before I even knew what we would become…
+    </div>
+    <button onclick="nextPage()">Next</button>
+</div>
+
+<div class="container page fade" id="page5">
+    <div class="handwriting">
+        And on May 21, 2024…  
+        it became something real.
+    </div>
+    <button onclick="nextPage()">Next</button>
+</div>
+
+<div class="container page fade" id="page6">
+    <div class="handwriting">
+        Since then,  
+        you haven’t just been in my life…  
+        you’ve become a part of me.
+    </div>
+    <button onclick="nextPage()">Next</button>
+</div>
+
+<!-- FINAL PHOTO PAGE -->
+<div class="container page fade" id="page7">
+    <div class="photo-container">
+        <!-- PUT HER IMAGE HERE -->
+        <img src="her.jpg" alt="Aleena">
+
+        <div class="overlay">
+            You are my peace,  
+            my happiness…  
+            <br>
+            Happy 21st Birthday ❤️
+        </div>
+    </div>
+</div>
 
 <script>
 let currentPage = 1;
@@ -91,21 +170,17 @@ function nextPage() {
     document.getElementById("page" + currentPage).classList.add("active");
 }
 
-// Floating hearts
+/* Hearts */
 setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.innerHTML = "❤️";
     heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = Math.random() * 20 + 20 + "px";
+    heart.style.fontSize = Math.random() * 15 + 15 + "px";
     document.body.appendChild(heart);
 
     setTimeout(() => heart.remove(), 5000);
 }, 300);
-
-function playMusic() {
-    document.getElementById("music").play();
-}
 </script>
 
 </body>
